@@ -39,6 +39,6 @@ Aplikasi SIMS PPOB adalah aplikasi web yang dikembangkan untuk memenuhi tugas te
    npm install
    ```
 
-## Panduan Instalasi
+## Link Demo Aplikasi
 
 Link demo aplikasi : https://sims-ppob-pandu-wahyudi.vercel.app
