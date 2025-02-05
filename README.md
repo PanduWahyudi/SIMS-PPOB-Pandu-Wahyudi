@@ -41,4 +41,4 @@ Aplikasi SIMS PPOB adalah aplikasi web yang dikembangkan untuk memenuhi tugas te
 
 ## Panduan Instalasi
 
-Link demo aplikasi :
+Link demo aplikasi : https://sims-ppob-pandu-wahyudi.vercel.app
