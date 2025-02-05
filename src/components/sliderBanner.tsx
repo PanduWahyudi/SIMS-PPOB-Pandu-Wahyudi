@@ -1,9 +1,9 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar } from "swiper/modules";
 
-import "swiper/css";
-import "swiper/css/scrollbar";
+
+import "swiper/swiper-bundle.min.css";
+import "swiper/swiper.min.css";
 
 interface Banner {
   banner_name: string;
@@ -18,7 +18,6 @@ interface SliderBannerProps {
 const SliderBanner: React.FC<SliderBannerProps> = ({ banners }) => {
   return (
     <Swiper
-      modules={[Scrollbar]}
       spaceBetween={50}
       slidesPerView={4}
       scrollbar={{ hide: true }}
