@@ -14,15 +14,15 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
+  
   // Profile State
-  const profile = useSelector((state: RootState) => state.profile.data);
-  const isLoadingProfile = useSelector(
-    (state: RootState) => state.profile.isLoading
+  const { data: profile, isLoading: isLoadingProfile } = useSelector(
+    (state: RootState) => state.profile
   );
+
   // Balance State
-  const { data: balance } = useSelector((state: RootState) => state.balance);
-  const isLoadingBalance = useSelector(
-    (state: RootState) => state.balance.isLoading
+  const { data: balance, isLoading: isLoadingBalance } = useSelector(
+    (state: RootState) => state.balance
   );
 
   useEffect(() => {

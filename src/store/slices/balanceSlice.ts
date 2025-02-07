@@ -1,5 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { axiosPrivateInstance } from "../../axios/axios";
+
+interface BalanceState {
+  data: number;
+  isLoading: boolean;
+}
 
 export const fetchBalance = createAsyncThunk(
   "balance/fetchBalance",
@@ -9,25 +14,24 @@ export const fetchBalance = createAsyncThunk(
   }
 );
 
+const initialState: BalanceState = {
+  data: 0,
+  isLoading: true,
+};
+
 const balanceSlice = createSlice({
   name: "balance",
-  initialState: {
-    data: 0,
-    isLoading: true,
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchBalance.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(
-        fetchBalance.fulfilled,
-        (state, action: PayloadAction<number>) => {
-          state.data = action.payload;
-          state.isLoading = false;
-        }
-      )
+      .addCase(fetchBalance.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.isLoading = false;
+      })
       .addCase(fetchBalance.rejected, (state) => {
         state.isLoading = false;
       });

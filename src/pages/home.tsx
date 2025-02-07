@@ -1,51 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MainLayout from "../components/layouts/mainlayout";
 import { SliderBanner } from "../components/sliderBanner";
-import useAxiosPrivateInstance from "../hooks/useAxiosPrivateInstance";
-
-interface Service {
-  service_code: string;
-  service_name: string;
-  service_icon: string;
-  service_tariff: number;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { fetchBanners } from "../store/slices/bannerSlice";
+import { fetchServices } from "../store/slices/serviceSlice";
 
 function HomePage() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [banners, setBanners] = useState([]);
-  const [loadingServices, setLoadingServices] = useState(true);
-  const [loadingBanners, setLoadingBanners] = useState(true);
-  const axiosPrivateInstance = useAxiosPrivateInstance();
+  const dispatch = useDispatch<AppDispatch>();
+  const { data: banners, isLoading: loadingBanners } = useSelector(
+    (state: RootState) => state.banner
+  );
+  const { data: services, loading: loadingServices } = useSelector(
+    (state: RootState) => state.service
+  );
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/services");
-        setServices(response.data.data);
-      } catch (error) {
-        console.error("Error fetching service:", error);
-      } finally {
-        setLoadingServices(false);
-      }
-    };
-
-    fetchServices();
-  }, [axiosPrivateInstance]);
-
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/banner");
-        setBanners(response.data.data);
-      } catch (error) {
-        console.error("Error fetching banner:", error);
-      } finally {
-        setLoadingBanners(false);
-      }
-    };
-
-    fetchBanners();
-  }, [axiosPrivateInstance]);
+    dispatch(fetchServices());
+    dispatch(fetchBanners());
+  }, [dispatch]);
 
   return (
     <MainLayout>
