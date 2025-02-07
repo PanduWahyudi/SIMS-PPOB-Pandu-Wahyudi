@@ -1,15 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { axiosInstance } from "../../axios/axios";
+import { axiosPrivateInstance } from "../../axios/axios";
 
-const token = JSON.parse(localStorage.getItem("token") || "").value;
 export const fetchBalance = createAsyncThunk(
   "balance/fetchBalance",
   async () => {
-    const response = await axiosInstance.get("/balance", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosPrivateInstance.get("/balance");
     return response.data.data.balance;
   }
 );

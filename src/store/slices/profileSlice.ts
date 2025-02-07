@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { axiosInstance } from "../../axios/axios";
+import { axiosPrivateInstance } from "../../axios/axios";
 
 interface Profile {
   first_name: string;
@@ -8,15 +8,11 @@ interface Profile {
   email: string;
 }
 
-const token = JSON.parse(localStorage.getItem("token") || "").value;
+
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async () => {
-    const response = await axiosInstance.get("/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axiosPrivateInstance.get("/profile");
     return response.data.data;
   }
 );
