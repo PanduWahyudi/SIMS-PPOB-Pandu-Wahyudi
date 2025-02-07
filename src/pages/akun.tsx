@@ -1,59 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PenBox } from "lucide-react";
 import { Button } from "../components/button";
 import { EmailInput, NameInput } from "../components/input";
 import Navbar from "../components/navbar";
 import { FieldValues, useForm } from "react-hook-form";
-import useAxiosPrivateInstance from "../hooks/useAxiosPrivateInstance";
+import { axiosPrivateInstance } from "../axios/axios";
 import ContentGuard from "../hooks/contentGuard";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 type EditClickEvent = React.MouseEvent<HTMLButtonElement>;
 
-interface Profile {
-  email: string;
-  first_name: string;
-  last_name: string;
-  image?: string;
-}
-
 function AccountPage() {
-  const axiosPrivateInstance = useAxiosPrivateInstance();
-  const [profile, setProfile] = useState<Profile>({
-    email: "",
-    first_name: "",
-    last_name: "",
-  });
-  const [loadingProfile, setIsLoadingProfile] = useState<boolean>(true);
-  const [image, setImage] = useState("");
+  // Profile State
+  const { data: profile, isLoading: loadingProfile } = useSelector(
+    (state: RootState) => state.profile
+  );
+
+  const [image, setImage] = useState(
+    profile?.profile_image || localStorage.getItem("profile_image") || ""
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit } = useForm();
   const { register: registerImage } = useForm();
-
-  // Fetch data profile
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/profile");
-        setProfile(response.data.data);
-        setImage(response.data.data.profile_image);
-        reset({
-          email: response.data.data.email,
-          first_name: response.data.data.first_name,
-          last_name: response.data.data.last_name,
-        });
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setIsLoadingProfile(false);
-      }
-    };
-
-    fetchProfile();
-  }, [axiosPrivateInstance, reset]);
 
   // Upload image
   const onImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +43,7 @@ function AccountPage() {
 
     setIsUploadingImage(true);
     const formData = new FormData();
-    formData.append("file", file); 
+    formData.append("file", file);
 
     try {
       const response = await axiosPrivateInstance.put(
@@ -85,6 +58,10 @@ function AccountPage() {
 
       if (response.status === 200) {
         setImage(response.data.data?.profile_image);
+        localStorage.setItem(
+          "profile_image",
+          response.data.data?.profile_image
+        );
         console.log("Image uploaded successfully");
       } else {
         console.error("Gagal mengunggah gambar:", response.data.message);
@@ -112,7 +89,12 @@ function AccountPage() {
       });
 
       if (response.status === 200) {
+        localStorage.setItem("profile_image", response.data.data.profile_image);
+        localStorage.setItem("email", response.data.data.email);
+        localStorage.setItem("first_name", response.data.data.first_name);
+        localStorage.setItem("last_name", response.data.data.last_name);
         setIsEditing(false);
+
         console.log(response.data.data);
       }
       console.log("Profile updated successfully");
@@ -128,6 +110,10 @@ function AccountPage() {
   const handleLogout = () => {
     navigate("/");
     localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("profile_image");
+    localStorage.removeItem("first_name");
+    localStorage.removeItem("last_name");
   };
 
   return (
@@ -140,8 +126,8 @@ function AccountPage() {
             <div className="w-[120px] h-[120px] flex justify-center items-center relative cursor-pointer">
               <div className="w-[100px] h-[100px] border-2 border-neutral-200 rounded-full overflow-hidden">
                 <img
-                  src={image}
-                  alt="profile"
+                  src={isUploadingImage ? "" : image}
+                  alt={isUploadingImage ? "Loading.." : "profile"}
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>
@@ -173,7 +159,9 @@ function AccountPage() {
                   id="email"
                   placeholder={loadingProfile ? "Loading..." : "email anda"}
                   disabled={!isEditing}
-                  defaultValue={profile.email}
+                  defaultValue={
+                    profile?.email || localStorage.getItem("email") || ""
+                  }
                   {...register("email")}
                 />
               </div>
@@ -186,7 +174,11 @@ function AccountPage() {
                   id="first_name"
                   placeholder={loadingProfile ? "Loading..." : "nama depan"}
                   disabled={!isEditing}
-                  defaultValue={profile.first_name}
+                  defaultValue={
+                    profile?.first_name ||
+                    localStorage.getItem("first_name") ||
+                    ""
+                  }
                   {...register("first_name")}
                 />
               </div>
@@ -199,7 +191,11 @@ function AccountPage() {
                   id="last_name"
                   placeholder={loadingProfile ? "Loading..." : "nama belakang"}
                   disabled={!isEditing}
-                  defaultValue={profile.last_name}
+                  defaultValue={
+                    profile?.last_name ||
+                    localStorage.getItem("last_name") ||
+                    ""
+                  }
                   {...register("last_name")}
                 />
               </div>
