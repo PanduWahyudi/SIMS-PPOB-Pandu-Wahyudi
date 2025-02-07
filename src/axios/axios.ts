@@ -6,11 +6,3 @@ export const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-export const axiosPrivateInstance = axios.create({
-  baseURL: "https://take-home-test-api.nutech-integrasi.com", // Use the proxy path
-  headers: {
-    "Content-Type": "application/json",
-  },
-  // withCredentials: true,
-});

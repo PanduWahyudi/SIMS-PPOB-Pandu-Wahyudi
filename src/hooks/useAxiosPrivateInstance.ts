@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { axiosPrivateInstance } from "../axios/axios";
+import { axiosInstance } from "../axios/axios";
 
 const useAxiosPrivateInstance = () => {
   useEffect(() => {
-    const requestInterceptor = axiosPrivateInstance.interceptors.request.use(
+    const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
         const token = JSON.parse(localStorage.getItem("token") || "").value;
         // const token = localStorage.getItem("token");
@@ -18,11 +18,11 @@ const useAxiosPrivateInstance = () => {
     );
 
     return () => {
-      axiosPrivateInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.request.eject(requestInterceptor);
     };
   }, []);
 
-  return axiosPrivateInstance;
+  return axiosInstance;
 };
 
 export default useAxiosPrivateInstance;
