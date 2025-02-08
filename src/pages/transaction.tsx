@@ -1,4 +1,4 @@
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Loader2 } from "lucide-react";
 import MainLayout from "../components/layouts/mainlayout";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +34,9 @@ function TransactionPage() {
     <MainLayout>
       <div className="mt-[4%] w-full ">
         <h1 className="text-xl font-semibold mb-2">Semua Transaksi</h1>
-        {isLoading && offset === 0 && <p className="text-center">Loading...</p>}
+        {isLoading && offset === 0 && (
+          <Loader2 className="w-8 h-8 animate-spin" />
+        )}
         {histories.map((history) => (
           <div
             key={history.invoice_number}
@@ -84,7 +86,11 @@ function TransactionPage() {
               disabled={isShowMoreLoading}
               className="text-red-500 font-semibold text-sm cursor-pointer"
             >
-              {isShowMoreLoading ? "Loading..." : "Show More"}
+              {isShowMoreLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                "Show More"
+              )}
             </button>
           </div>
         )}

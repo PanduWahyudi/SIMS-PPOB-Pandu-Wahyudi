@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from "../store";
 import { fetchBanners } from "../store/slices/bannerSlice";
 import { fetchServices } from "../store/slices/serviceSlice";
 import { slugify } from "../utils/slugify";
+import { Loader2 } from "lucide-react";
 
 function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +38,7 @@ function HomePage() {
     <MainLayout>
       <div className="w-full mt-[4%] flex justify-between">
         {loadingServices ? (
-          <p>Loading services...</p>
+          <Loader2 className="w-8 h-8 animate-spin" />
         ) : (
           services.map((service) => (
             <button
@@ -59,7 +60,7 @@ function HomePage() {
         <h1 className="font-semibold">Temukan promo menarik</h1>
         <div className="mt-4">
           {loadingBanners ? (
-            <p>Loading banners...</p>
+            <Loader2 className="w-8 h-8 animate-spin" />
           ) : (
             <SliderBanner banners={banners} />
           )}

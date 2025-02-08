@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { fetchProfile } from "../../store/slices/profileSlice";
 import { fetchBalance } from "../../store/slices/balanceSlice";
+import { Loader2 } from "lucide-react";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
-  
+
   // Profile State
   const { data: profile, isLoading: isLoadingProfile } = useSelector(
     (state: RootState) => state.profile
@@ -37,7 +38,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="w-full max-w-6xl mx-auto px-4">
           <div className="flex justify-between mt-6 ">
             {isLoadingProfile ? (
-              <div>Loading profile...</div>
+              <Loader2 className="w-8 h-8 animate-spin" />
             ) : (
               profile && (
                 <UserProfile
@@ -48,7 +49,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               )
             )}
             {isLoadingBalance ? (
-              <div>Loading balance...</div>
+              <Loader2 className="w-8 h-8 animate-spin" />
             ) : (
               <BalanceInfo balance={balance} />
             )}

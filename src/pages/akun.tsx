@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PenBox } from "lucide-react";
+import { PenBox, Loader2 } from "lucide-react"; 
 import { Button } from "../components/button";
 import { EmailInput, NameInput } from "../components/input";
 import Navbar from "../components/navbar";
@@ -14,13 +14,13 @@ type EditClickEvent = React.MouseEvent<HTMLButtonElement>;
 
 function AccountPage() {
   // Profile State
-  const { data: profile, isLoading: loadingProfile } = useSelector(
-    (state: RootState) => state.profile
-  );
+  const { data: profile } = useSelector((state: RootState) => state.profile);
 
   const [image, setImage] = useState(
     profile?.profile_image || localStorage.getItem("profile_image") || ""
   );
+
+  const [loadingProfile, setLoadingProfile] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,6 +82,7 @@ function AccountPage() {
   // Update profile
   const onSubmit = async (data: FieldValues) => {
     setIsSubmitting(true);
+    setLoadingProfile(true);
     try {
       const response = await axiosPrivateInstance.put("/profile/update", {
         first_name: data.first_name,
@@ -101,6 +102,7 @@ function AccountPage() {
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
+      setLoadingProfile(false);
       setIsSubmitting(false);
     }
   };
@@ -125,11 +127,17 @@ function AccountPage() {
             {/* Form Upload Image */}
             <div className="w-[120px] h-[120px] flex justify-center items-center relative cursor-pointer">
               <div className="w-[100px] h-[100px] border-2 border-neutral-200 rounded-full overflow-hidden">
-                <img
-                  src={isUploadingImage ? "" : image}
-                  alt={isUploadingImage ? "Loading.." : "profile"}
-                  className="w-full h-full object-cover rounded-full"
-                />
+                {isUploadingImage ? (
+                  <div className="w-full h-full flex justify-center items-center">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  </div>
+                ) : (
+                  <img
+                    src={image}
+                    alt="profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                )}
               </div>
               {!isUploadingImage && (
                 <>
@@ -157,7 +165,7 @@ function AccountPage() {
                 <EmailInput
                   className="mt-1"
                   id="email"
-                  placeholder={loadingProfile ? "Loading..." : "email anda"}
+                  placeholder={loadingProfile ? "...." : "email anda"}
                   disabled={!isEditing}
                   defaultValue={
                     profile?.email || localStorage.getItem("email") || ""
@@ -172,7 +180,7 @@ function AccountPage() {
                 <NameInput
                   className="mt-1"
                   id="first_name"
-                  placeholder={loadingProfile ? "Loading..." : "nama depan"}
+                  placeholder={loadingProfile ? "...." : "nama depan"}
                   disabled={!isEditing}
                   defaultValue={
                     profile?.first_name ||
@@ -189,7 +197,7 @@ function AccountPage() {
                 <NameInput
                   className="mt-1"
                   id="last_name"
-                  placeholder={loadingProfile ? "Loading..." : "nama belakang"}
+                  placeholder={loadingProfile ? "...." : "nama belakang"}
                   disabled={!isEditing}
                   defaultValue={
                     profile?.last_name ||
@@ -206,7 +214,11 @@ function AccountPage() {
                     className="w-full disabled:bg-neutral-600"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Menyimpan..." : "Simpan"}
+                    {isSubmitting ? (
+                      <Loader2 className="w-5 h-5 text-white animate-spin" />
+                    ) : (
+                      "Simpan"
+                    )}
                   </Button>
                 ) : (
                   <Button

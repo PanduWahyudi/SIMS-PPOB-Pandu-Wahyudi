@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { ConfirmModal } from "../components/modals/confirmModal";
 import { SuccessModal } from "../components/modals/succesModal";
 import { FailedModal } from "../components/modals/failedModal";
-import { Banknote } from "lucide-react";
+import { Banknote, Loader2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { axiosPrivateInstance } from "../axios/axios";
 
@@ -102,7 +102,11 @@ function ServicePage() {
               disabled={!nominalValue || nominalValue == 0 || isLoading}
               className="disabled:bg-slate-600"
             >
-              {isLoading ? "Sedang Proses..." : "Bayar"}
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 text-white animate-spin" />
+              ) : (
+                "Bayar"
+              )}
             </Button>
           </form>
 
