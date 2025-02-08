@@ -9,7 +9,6 @@ import { FailedModal } from "../components/modals/failedModal";
 import { Banknote, Loader2 } from "lucide-react";
 import { axiosPrivateInstance } from "../utils/axiosInstance";
 
-
 function TopUpPage() {
   const nominalTopUp: number[] = [10000, 20000, 50000, 100000, 250000, 500000];
 
@@ -108,7 +107,7 @@ function TopUpPage() {
           {/* Confirmation Pop Up */}
           {showModal && (
             <ConfirmModal
-              description="Konfirmasi Pembayaran"
+              description="Anda yakin untuk Top Up sebesar"
               confirmBtnText="Ya, lanjutkan Bayar"
               nominal={nominalValue}
               onCancel={() => setShowModal(false)}
@@ -122,7 +121,7 @@ function TopUpPage() {
           {/* Success Pop Up */}
           {showSuccessModal && (
             <SuccessModal
-              description="Ya ya"
+              description="Top Up sebesar"
               nominal={nominalValue}
               onBack={() => {
                 setShowSuccessModal(false);
@@ -133,7 +132,7 @@ function TopUpPage() {
           {/* Failed Pop Up */}
           {showFailedModal && (
             <FailedModal
-              description="Ya ya"
+              description="Top Up sebesar"
               nominal={nominalValue}
               onBack={() => {
                 setShowFailedModal(false);

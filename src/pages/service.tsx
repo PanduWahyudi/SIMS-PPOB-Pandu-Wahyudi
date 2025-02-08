@@ -112,7 +112,7 @@ function ServicePage() {
 
           {showModal && (
             <ConfirmModal
-              description="Konfirmasi Pembayaran"
+              description={`Bayar ${serviceName.toLowerCase()} senilai`}
               confirmBtnText="Ya, lanjutkan Bayar"
               nominal={nominalValue}
               onCancel={() => setShowModal(false)}
@@ -122,7 +122,7 @@ function ServicePage() {
 
           {showSuccessModal && (
             <SuccessModal
-              description="Ya ya"
+              description={`Pembayaran ${serviceName.toLowerCase()} senilai`}
               nominal={nominalValue}
               onBack={() => {
                 setShowSuccessModal(false);
@@ -133,7 +133,7 @@ function ServicePage() {
 
           {showFailedModal && (
             <FailedModal
-              description="Ya ya"
+              description={`Pembayaran ${serviceName.toLowerCase()} senilai`}
               nominal={nominalValue}
               onBack={() => {
                 setShowFailedModal(false);

@@ -44,7 +44,7 @@ function TransactionPage() {
           >
             <div className="flex flex-col gap-1">
               <span
-                className={`flex items-center space-x-1 ${
+                className={`flex items-center gap-1 ${
                   history.transaction_type === "TOPUP"
                     ? "text-teal-500"
                     : "text-danger"
@@ -59,7 +59,7 @@ function TransactionPage() {
                   Rp{history.total_amount.toLocaleString("id-ID")}
                 </p>
               </span>
-              <span className="text-xs text-slate-400 flex space-x-1">
+              <span className="text-xs text-slate-400 flex gap-3">
                 <p>
                   {new Date(history.created_on).toLocaleDateString("id-ID", {
                     day: "numeric",
@@ -67,11 +67,13 @@ function TransactionPage() {
                     year: "numeric",
                   })}
                 </p>
-                <p>
-                  {new Date(history.created_on).toLocaleTimeString("id-ID", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                <p className="flex gap-1">
+                  <span>
+                    {new Date(history.created_on).toLocaleTimeString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                   WIB
                 </p>
               </span>
