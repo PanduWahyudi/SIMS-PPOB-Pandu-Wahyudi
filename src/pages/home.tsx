@@ -29,7 +29,7 @@ function HomePage() {
     service_name: string;
   }) => {
     const slug = slugify(service.service_name);
-    navigate(`/layanan/${slug}`, {
+    navigate(`/pembayaran/${slug}`, {
       state: { selectedService: service },
     });
   };

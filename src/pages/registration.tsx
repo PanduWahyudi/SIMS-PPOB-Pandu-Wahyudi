@@ -14,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../utils/axiosInstance";
 
 function RegistrationPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorServer, setErrorServer] = useState<boolean>(false);
   const [alert, setAlert] = useState<{
     message: string;
     type: "success" | "error";
@@ -56,6 +57,7 @@ function RegistrationPage() {
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || "Registration failed";
       setAlert({ message: errorMessage, type: "error" });
+      setErrorServer(true);
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +80,7 @@ function RegistrationPage() {
             <div className="w-full">
               <EmailInput
                 {...register("email")}
-                error={!!errors.email}
+                error={!!errors.email || errorServer}
                 disabled={isLoading}
               />
               {errors.email && (
@@ -91,7 +93,7 @@ function RegistrationPage() {
               <NameInput
                 placeholder="nama depan"
                 {...register("first_name")}
-                error={!!errors.first_name}
+                error={!!errors.first_name || errorServer}
                 disabled={isLoading}
               />
               {errors.first_name && (
@@ -104,7 +106,7 @@ function RegistrationPage() {
               <NameInput
                 placeholder="nama belakang"
                 {...register("last_name")}
-                error={!!errors.last_name}
+                error={!!errors.last_name || errorServer}
                 disabled={isLoading}
               />
               {errors.last_name && (
@@ -117,7 +119,7 @@ function RegistrationPage() {
               <PasswordInput
                 {...register("password")}
                 placeholder="buat password"
-                error={!!errors.password}
+                error={!!errors.password || errorServer}
                 disabled={isLoading}
               />
               {errors.password && (
@@ -130,7 +132,7 @@ function RegistrationPage() {
               <PasswordInput
                 {...register("confirm_password")}
                 placeholder="konfirmasi password"
-                error={!!errors.confirm_password}
+                error={!!errors.confirm_password || errorServer}
                 disabled={isLoading}
               />
               {errors.confirm_password && (

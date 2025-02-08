@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
 
   const navItems: NavItem[] = [
     { path: "/top-up", label: "Top Up" },
-    { path: "/transaction", label: "Transaction" },
+    { path: "/riwayat-transaksi", label: "Transaction" },
     { path: "/akun", label: "Akun" },
   ];
 

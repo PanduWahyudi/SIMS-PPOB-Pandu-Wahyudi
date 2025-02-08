@@ -11,7 +11,8 @@ import { Alert } from "../components/alert";
 import { axiosInstance } from "../utils/axiosInstance";
 
 function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorServer, setErrorServer] = useState<boolean>(false);
   const [alert, setAlert] = useState<{
     message: string;
     type: "success" | "error";
@@ -58,6 +59,7 @@ function LoginPage() {
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || "Login failed";
       setAlert({ message: errorMessage, type: "error" });
+      setErrorServer(true);
     } finally {
       setIsLoading(false);
       console.log(localStorage.getItem("token"));
@@ -80,7 +82,7 @@ function LoginPage() {
             <div className="w-full">
               <EmailInput
                 {...register("email")}
-                error={!!errors.email}
+                error={!!errors.email || errorServer}
                 disabled={isLoading}
               />
               {errors.email && (
@@ -92,7 +94,7 @@ function LoginPage() {
             <div className="w-full">
               <PasswordInput
                 {...register("password")}
-                error={!!errors.password} // Pass error state
+                error={!!errors.password || errorServer} // Pass error state
                 disabled={isLoading} // Pass loading state
               />
               {errors.password && (
