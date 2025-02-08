@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { fetchBanners } from "../store/slices/bannerSlice";
 import { fetchServices } from "../store/slices/serviceSlice";
+import { slugify } from "../utils/slugify";
 
 function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,8 +23,14 @@ function HomePage() {
     dispatch(fetchBanners());
   }, [dispatch]);
 
-  const handleServiceClick = (service: { service_code: string }) => {
-    navigate("/layanan", { state: { selectedService: service } });
+  const handleServiceClick = (service: {
+    service_code: string;
+    service_name: string;
+  }) => {
+    const slug = slugify(service.service_name);
+    navigate(`/layanan/${slug}`, {
+      state: { selectedService: service },
+    });
   };
 
   return (

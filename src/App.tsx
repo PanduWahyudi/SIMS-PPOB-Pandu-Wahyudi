@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/" element={<LoginPage />} />
         <Route path="/beranda" element={<HomePage />} />
         <Route path="/registrasi" element={<RegistrationPage />} />
-        <Route path="/layanan" element={<ServicePage />} />
+        <Route path="/layanan/:service_name" element={<ServicePage />} />
         <Route path="/top-up" element={<TopUpPage />} />
         <Route path="/transaction" element={<TransactionPage />} />
         <Route path="/akun" element={<AccountPage />} />
