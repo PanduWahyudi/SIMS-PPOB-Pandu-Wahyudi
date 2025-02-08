@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/layouts/mainlayout";
 import { SliderBanner } from "../components/sliderBanner";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +9,7 @@ import { fetchServices } from "../store/slices/serviceSlice";
 
 function HomePage() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { data: banners, isLoading: loadingBanners } = useSelector(
     (state: RootState) => state.banner
   );
@@ -20,6 +22,10 @@ function HomePage() {
     dispatch(fetchBanners());
   }, [dispatch]);
 
+  const handleServiceClick = (service: { service_code: string }) => {
+    navigate("/layanan", { state: { selectedService: service } });
+  };
+
   return (
     <MainLayout>
       <div className="w-full mt-[4%] flex justify-between">
@@ -30,6 +36,7 @@ function HomePage() {
             <button
               key={service.service_code}
               className="w-14 flex flex-col gap-2 cursor-pointer items-center"
+              onClick={() => handleServiceClick(service)}
             >
               <div className="bg-blue-100 w-14 h-14 rounded-md flex items-center justify-center">
                 <img src={service.service_icon} alt={service.service_name} />

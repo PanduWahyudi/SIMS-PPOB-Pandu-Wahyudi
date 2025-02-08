@@ -7,7 +7,7 @@ import { ConfirmModal } from "../components/modals/confirmModal";
 import { SuccessModal } from "../components/modals/succesModal";
 import { FailedModal } from "../components/modals/failedModal";
 import { Banknote } from "lucide-react";
-import useAxiosPrivateInstance from "../hooks/useAxiosPrivateInstance";
+import { axiosPrivateInstance } from "../axios/axios";
 
 function TopUpPage() {
   const nominalTopUp: number[] = [10000, 20000, 50000, 100000, 250000, 500000];
@@ -25,12 +25,10 @@ function TopUpPage() {
     setValue("nominal", nominal);
   };
 
-  const axiosPrivate = useAxiosPrivateInstance();
-
   const onSubmit = async (data: FieldValues) => {
     try {
       setIsLoading(true);
-      const response = await axiosPrivate.post("/topup", {
+      const response = await axiosPrivateInstance.post("/topup", {
         top_up_amount: data.nominal,
       });
 
@@ -38,10 +36,8 @@ function TopUpPage() {
         console.log(response.data);
         setShowSuccessModal(true);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || "Login failed";
-      console.log(errorMessage);
+    } catch (erorr) {
+      console.log(erorr);
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +52,10 @@ function TopUpPage() {
             <h2 className="text-2xl font-semibold leading-6">Nominal Top Up</h2>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="w-full flex mt-[3%]">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex mt-[3%]"
+          >
             <div className="flex flex-col space-y-4 w-[60%]">
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3">
