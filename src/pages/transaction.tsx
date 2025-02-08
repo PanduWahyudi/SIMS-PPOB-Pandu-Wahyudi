@@ -1,7 +1,7 @@
 import { Plus, Minus } from "lucide-react";
 import MainLayout from "../components/layouts/mainlayout";
-import useAxiosPrivateInstance from "../hooks/useAxiosPrivateInstance";
 import { useEffect, useState } from "react";
+import { axiosPrivateInstance } from "../axios/axios";
 
 interface TransactionRecord {
   invoice_number: string;
@@ -17,7 +17,6 @@ function TransactionPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const limit = 5;
-  const axiosPrivateInstance = useAxiosPrivateInstance();
 
   useEffect(() => {
     const fetchHistories = async (offset: number) => {
@@ -37,8 +36,8 @@ function TransactionPage() {
       }
     };
 
-    fetchHistories(0); // Fetch initial data on mount
-  }, [axiosPrivateInstance, limit]);
+    fetchHistories(0); 
+  }, [limit]);
 
   const handleShowMore = async () => {
     const newOffset = offset + limit;
@@ -55,7 +54,7 @@ function TransactionPage() {
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Error fetching service:", error);
+      console.error("Error fetching data transactions:", error);
     } finally {
       // setIsLoading(false);
     }
