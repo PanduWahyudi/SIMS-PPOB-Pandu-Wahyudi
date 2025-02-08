@@ -2,6 +2,7 @@ import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Link, useLocation } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 interface AuthFormProps {
   handleSubmit: UseFormHandleSubmit<FieldValues>;
@@ -34,11 +35,13 @@ const AuthForm: React.FC<AuthFormProps> = ({
             disabled={isLoading}
             className="disabled:bg-slate-600"
           >
-            {isLoading
-              ? "Loading..." // Tampilkan teks loading jika isLoading true
-              : isRegistrationPage
-              ? "Registrasi"
-              : "Masuk"}
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 text-white animate-spin" /> // Tampilkan teks loading jika isLoading true
+            ) : isRegistrationPage ? (
+              "Registrasi"
+            ) : (
+              "Masuk"
+            )}
           </Button>
           <span className="flex justify-center text-sm space-x-1 text-slate-600">
             <p>{isRegistrationPage ? "sudah" : "belum"} punya akun?</p>

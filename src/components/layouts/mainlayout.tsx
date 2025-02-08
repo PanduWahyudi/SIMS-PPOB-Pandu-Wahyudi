@@ -1,55 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../navbar";
 import { BalanceInfo } from "../balanceInfo";
 import { UserProfile } from "../userProfile";
-import useAxiosPrivateInstance from "../../hooks/useAxiosPrivateInstance";
 import ContentGuard from "../../hooks/contentGuard";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store";
+import { fetchProfile } from "../../store/slices/profileSlice";
+import { fetchBalance } from "../../store/slices/balanceSlice";
+import { Loader2 } from "lucide-react";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
-interface Profile {
-  first_name: string;
-  last_name: string;
-  profile_image: string;
-}
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [balance, setBalance] = useState<number | null>(null);
-  const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(true);
-  const [isLoadingBalance, setIsLoadingBalance] = useState<boolean>(true);
-  const axiosPrivateInstance = useAxiosPrivateInstance();
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Profile State
+  const { data: profile, isLoading: isLoadingProfile } = useSelector(
+    (state: RootState) => state.profile
+  );
+
+  // Balance State
+  const { data: balance, isLoading: isLoadingBalance } = useSelector(
+    (state: RootState) => state.balance
+  );
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/profile");
-        setProfile(response.data.data);
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      } finally {
-        setIsLoadingProfile(false);
-      }
-    };
-
-    fetchProfile();
-  }, [axiosPrivateInstance]);
-
-  useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/balance");
-        setBalance(response.data.data.balance);
-      } catch (error) {
-        console.error("Error fetching balance:", error);
-      } finally {
-        setIsLoadingBalance(false);
-      }
-    };
-
-    fetchBalance();
-  }, [axiosPrivateInstance]);
+    dispatch(fetchProfile());
+    dispatch(fetchBalance());
+  }, [dispatch]);
 
   return (
     <>
@@ -58,7 +38,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="w-full max-w-6xl mx-auto px-4">
           <div className="flex justify-between mt-6 ">
             {isLoadingProfile ? (
-              <div>Loading profile...</div>
+              <Loader2 className="w-8 h-8 animate-spin" />
             ) : (
               profile && (
                 <UserProfile
@@ -69,7 +49,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               )
             )}
             {isLoadingBalance ? (
-              <div>Loading balance...</div>
+              <Loader2 className="w-8 h-8 animate-spin" />
             ) : (
               <BalanceInfo balance={balance} />
             )}

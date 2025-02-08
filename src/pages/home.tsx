@@ -1,62 +1,50 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "../components/layouts/mainlayout";
 import { SliderBanner } from "../components/sliderBanner";
-import useAxiosPrivateInstance from "../hooks/useAxiosPrivateInstance";
-
-interface Service {
-  service_code: string;
-  service_name: string;
-  service_icon: string;
-  service_tariff: number;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { fetchBanners } from "../store/slices/bannerSlice";
+import { fetchServices } from "../store/slices/serviceSlice";
+import { slugify } from "../utils/slugify";
+import { Loader2 } from "lucide-react";
 
 function HomePage() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [banners, setBanners] = useState([]);
-  const [loadingServices, setLoadingServices] = useState(true);
-  const [loadingBanners, setLoadingBanners] = useState(true);
-  const axiosPrivateInstance = useAxiosPrivateInstance();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { data: banners, isLoading: loadingBanners } = useSelector(
+    (state: RootState) => state.banner
+  );
+  const { data: services, loading: loadingServices } = useSelector(
+    (state: RootState) => state.service
+  );
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/services");
-        setServices(response.data.data);
-      } catch (error) {
-        console.error("Error fetching service:", error);
-      } finally {
-        setLoadingServices(false);
-      }
-    };
+    dispatch(fetchServices());
+    dispatch(fetchBanners());
+  }, [dispatch]);
 
-    fetchServices();
-  }, [axiosPrivateInstance]);
-
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const response = await axiosPrivateInstance.get("/banner");
-        setBanners(response.data.data);
-      } catch (error) {
-        console.error("Error fetching banner:", error);
-      } finally {
-        setLoadingBanners(false);
-      }
-    };
-
-    fetchBanners();
-  }, [axiosPrivateInstance]);
+  const handleServiceClick = (service: {
+    service_code: string;
+    service_name: string;
+  }) => {
+    const slug = slugify(service.service_name);
+    navigate(`/pembayaran/${slug}`, {
+      state: { selectedService: service },
+    });
+  };
 
   return (
     <MainLayout>
       <div className="w-full mt-[4%] flex justify-between">
         {loadingServices ? (
-          <p>Loading services...</p>
+          <Loader2 className="w-8 h-8 animate-spin" />
         ) : (
           services.map((service) => (
-            <div
+            <button
               key={service.service_code}
-              className="w-14 flex flex-col gap-2"
+              className="w-14 flex flex-col gap-2 cursor-pointer items-center"
+              onClick={() => handleServiceClick(service)}
             >
               <div className="bg-blue-100 w-14 h-14 rounded-md flex items-center justify-center">
                 <img src={service.service_icon} alt={service.service_name} />
@@ -64,7 +52,7 @@ function HomePage() {
               <p className="text-center text-xs font-medium">
                 {service.service_name}
               </p>
-            </div>
+            </button>
           ))
         )}
       </div>
@@ -72,7 +60,7 @@ function HomePage() {
         <h1 className="font-semibold">Temukan promo menarik</h1>
         <div className="mt-4">
           {loadingBanners ? (
-            <p>Loading banners...</p>
+            <Loader2 className="w-8 h-8 animate-spin" />
           ) : (
             <SliderBanner banners={banners} />
           )}

@@ -12,12 +12,12 @@ const Navbar: React.FC = () => {
 
   const navItems: NavItem[] = [
     { path: "/top-up", label: "Top Up" },
-    { path: "/transaction", label: "Transaction" },
+    { path: "/riwayat-transaksi", label: "Transaction" },
     { path: "/akun", label: "Akun" },
   ];
 
   return (
-    <nav className="w-full bg-white shadow-md">
+    <nav className="w-full bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/beranda">

@@ -16,9 +16,9 @@ const App = () => {
         <Route path="/" element={<LoginPage />} />
         <Route path="/beranda" element={<HomePage />} />
         <Route path="/registrasi" element={<RegistrationPage />} />
-        <Route path="/layanan" element={<ServicePage />} />
+        <Route path="/pembayaran/:service_name" element={<ServicePage />} />
         <Route path="/top-up" element={<TopUpPage />} />
-        <Route path="/transaction" element={<TransactionPage />} />
+        <Route path="/riwayat-transaksi" element={<TransactionPage />} />
         <Route path="/akun" element={<AccountPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

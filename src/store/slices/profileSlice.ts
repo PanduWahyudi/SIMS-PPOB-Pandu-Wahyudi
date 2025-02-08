@@ -1,67 +1,53 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import useAxiosPrivateInstance from "../../hooks/useAxiosPrivateInstance";
-
-interface Profile {
-  first_name: string;
-  last_name: string;
-  profile_image: string;
-}
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
 interface ProfileState {
-  data: Profile | null;
-  loading: boolean;
-  error: string | null;
+  data: {
+    first_name: string;
+
+    last_name: string;
+
+    profile_image: string;
+    email: string;
+  } | null;
+
+  isLoading: boolean;
 }
 
 const initialState: ProfileState = {
   data: null,
-  loading: false,
-  error: null,
+  isLoading: true,
 };
+
+export const fetchProfile = createAsyncThunk(
+  "profile/fetchProfile",
+  async () => {
+    const response = await axiosPrivateInstance.get("/profile");
+    localStorage.setItem("profile_image", response.data.data.profile_image);
+    localStorage.setItem("email", response.data.data.email);
+    localStorage.setItem("first_name", response.data.data.first_name);
+    localStorage.setItem("last_name", response.data.data.last_name);
+    return response.data.data;
+  }
+);
 
 const profileSlice = createSlice({
   name: "profile",
   initialState,
-  reducers: {
-    fetchProfileStart: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    fetchProfileSuccess: (state, action: PayloadAction<Profile>) => {
-      state.loading = false;
-      state.data = action.payload;
-      state.error = null;
-    },
-    fetchProfileError: (state, action: PayloadAction<string>) => {
-      state.loading = false;
-      state.error = action.payload;
-      state.data = null;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchProfile.rejected, (state) => {
+        state.isLoading = false;
+      });
   },
 });
 
-export const { fetchProfileStart, fetchProfileSuccess, fetchProfileError } =
-  profileSlice.actions;
-
 export default profileSlice.reducer;
-
-
-// Thunk function (in a separate file or same file)
-export const fetchProfile =
-  () =>
-  async (dispatch: any, _: any,) => {
-    dispatch(fetchProfileStart());
-    const axiosPrivate = useAxiosPrivateInstance();
-
-    try {
-      const response = await axiosPrivate.get("/profile");
-      const profileData = response.data.data || {
-        first_name: "",
-        last_name: "",
-        profile_image: "",
-      };
-      dispatch(fetchProfileSuccess(profileData));
-    } catch (error) {
-      dispatch(fetchProfileError("Failed to fetch profile"));
-    }
-  };
