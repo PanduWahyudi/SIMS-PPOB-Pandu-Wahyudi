@@ -1,7 +1,6 @@
-// TransactionPage.tsx
 import { Plus, Minus } from "lucide-react";
 import MainLayout from "../components/layouts/mainlayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchHistories,
@@ -15,6 +14,7 @@ function TransactionPage() {
   const { histories, offset, hasMore, isLoading } = useSelector(
     (state: RootState) => state.transactions
   );
+  const [isShowMoreLoading, setIsShowMoreLoading] = useState(false);
   const limit = 5;
 
   useEffect(() => {
@@ -22,17 +22,19 @@ function TransactionPage() {
     dispatch(fetchHistories(0));
   }, [dispatch]);
 
-  const handleShowMore = () => {
+  const handleShowMore = async () => {
+    setIsShowMoreLoading(true);
     const newOffset = offset + limit;
     dispatch(incrementOffset());
-    dispatch(fetchHistories(newOffset));
+    await dispatch(fetchHistories(newOffset));
+    setIsShowMoreLoading(false);
   };
 
   return (
     <MainLayout>
       <div className="mt-[4%] w-full ">
         <h1 className="text-xl font-semibold mb-2">Semua Transaksi</h1>
-        {isLoading && <p className="text-center">Loading...</p>}
+        {isLoading && offset === 0 && <p className="text-center">Loading...</p>}
         {histories.map((history) => (
           <div
             key={history.invoice_number}
@@ -79,9 +81,10 @@ function TransactionPage() {
           <div className="flex justify-center my-4">
             <button
               onClick={handleShowMore}
+              disabled={isShowMoreLoading}
               className="text-red-500 font-semibold text-sm cursor-pointer"
             >
-              Show More
+              {isShowMoreLoading ? "Loading..." : "Show More"}
             </button>
           </div>
         )}
