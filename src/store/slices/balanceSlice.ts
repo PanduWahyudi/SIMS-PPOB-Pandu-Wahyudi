@@ -1,9 +1,10 @@
-import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
 interface BalanceState {
   data: number;
   isLoading: boolean;
+  isBalanceVisible: boolean; // Tambahkan state ini
 }
 
 export const fetchBalance = createAsyncThunk(
@@ -17,12 +18,18 @@ export const fetchBalance = createAsyncThunk(
 const initialState: BalanceState = {
   data: 0,
   isLoading: true,
+  isBalanceVisible: false, // Nilai default
 };
 
 const balanceSlice = createSlice({
   name: "balance",
   initialState,
-  reducers: {},
+  reducers: {
+    // Tambahkan reducer untuk mengubah isBalanceVisible
+    toggleBalanceVisibility: (state) => {
+      state.isBalanceVisible = !state.isBalanceVisible;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBalance.pending, (state) => {
@@ -38,4 +45,6 @@ const balanceSlice = createSlice({
   },
 });
 
+// Export action dan reducer
+export const { toggleBalanceVisibility } = balanceSlice.actions;
 export default balanceSlice.reducer;

@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { toggleBalanceVisibility } from "../store/slices/balanceSlice";
 
 interface BalanceInfoProps {
   balance?: number | null;
 }
 
 const BalanceInfo: React.FC<BalanceInfoProps> = ({ balance }) => {
-  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const dispatch = useDispatch();
+  const isBalanceVisible = useSelector(
+    (state: RootState) => state.balance.isBalanceVisible
+  );
 
-  const toggleBalanceVisibility = () => {
-    setIsBalanceVisible(!isBalanceVisible);
-  };
-
-  // Fungsi untuk mendapatkan jumlah digit
-  const getBalanceDigits = (balance: number | undefined | null) => {
-    if (!balance) return 0;
-    return balance.toString().replace(/\D/g, "").length;
-  };
-
-  // Render lingkaran sesuai jumlah digit
+  // Render lingkaran sebanyak 3 digit
   const renderHiddenBalance = () => {
-    const digitCount = getBalanceDigits(balance);
+    const digitCount = 3;
     return (
       <span className="flex items-center gap-1">
         {[...Array(digitCount)].map((_, index) => (
@@ -50,7 +46,7 @@ const BalanceInfo: React.FC<BalanceInfoProps> = ({ balance }) => {
         </p>
         <button
           className="cursor-pointer transition-all duration-300 ease-in-out"
-          onClick={toggleBalanceVisibility}
+          onClick={() => dispatch(toggleBalanceVisibility())}
         >
           {isBalanceVisible ? <Eye size={18} /> : <EyeOff size={18} />}
         </button>
