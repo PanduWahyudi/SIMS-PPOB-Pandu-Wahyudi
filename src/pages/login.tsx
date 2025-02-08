@@ -7,8 +7,8 @@ import { AuthForm } from "../components/authForm";
 import { AuthLayout } from "../components/layouts/authlayout";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { axiosInstance } from "../axios/axios";
 import { Alert } from "../components/alert";
+import { axiosInstance } from "../utils/axiosInstance";
 
 function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);

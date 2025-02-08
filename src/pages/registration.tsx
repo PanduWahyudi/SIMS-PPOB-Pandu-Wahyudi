@@ -8,10 +8,10 @@ import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthLayout } from "../components/layouts/authlayout";
 import { AuthForm } from "../components/authForm";
-import { axiosInstance } from "../axios/axios";
 import { useState } from "react";
 import { Alert } from "../components/alert";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../utils/axiosInstance";
 
 function RegistrationPage() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PenBox, Loader2 } from "lucide-react"; 
+import { PenBox, Loader2 } from "lucide-react";
 import { Button } from "../components/button";
 import { EmailInput, NameInput } from "../components/input";
 import Navbar from "../components/navbar";
 import { FieldValues, useForm } from "react-hook-form";
-import { axiosPrivateInstance } from "../axios/axios";
 import ContentGuard from "../hooks/contentGuard";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { axiosPrivateInstance } from "../utils/axiosInstance";
 
 type EditClickEvent = React.MouseEvent<HTMLButtonElement>;
 

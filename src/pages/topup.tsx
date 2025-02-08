@@ -7,7 +7,8 @@ import { ConfirmModal } from "../components/modals/confirmModal";
 import { SuccessModal } from "../components/modals/succesModal";
 import { FailedModal } from "../components/modals/failedModal";
 import { Banknote, Loader2 } from "lucide-react";
-import { axiosPrivateInstance } from "../axios/axios";
+import { axiosPrivateInstance } from "../utils/axiosInstance";
+
 
 function TopUpPage() {
   const nominalTopUp: number[] = [10000, 20000, 50000, 100000, 250000, 500000];

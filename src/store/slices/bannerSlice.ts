@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { axiosPrivateInstance } from "../../axios/axios";
+import { axiosPrivateInstance } from "../../utils/axiosInstance";
+
 
 interface Banner {
   banner_name: string;

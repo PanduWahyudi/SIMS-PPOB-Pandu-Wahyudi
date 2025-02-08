@@ -8,7 +8,7 @@ import { SuccessModal } from "../components/modals/succesModal";
 import { FailedModal } from "../components/modals/failedModal";
 import { Banknote, Loader2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { axiosPrivateInstance } from "../axios/axios";
+import { axiosPrivateInstance } from "../utils/axiosInstance";
 
 function ServicePage() {
   const location = useLocation();

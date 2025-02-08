@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { axiosPrivateInstance } from "../../axios/axios";
+import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
 interface TransactionRecord {
   invoice_number: string;
