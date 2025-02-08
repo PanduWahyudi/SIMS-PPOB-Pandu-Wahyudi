@@ -27,9 +27,9 @@ function HomePage() {
           <p>Loading services...</p>
         ) : (
           services.map((service) => (
-            <div
+            <button
               key={service.service_code}
-              className="w-14 flex flex-col gap-2"
+              className="w-14 flex flex-col gap-2 cursor-pointer items-center"
             >
               <div className="bg-blue-100 w-14 h-14 rounded-md flex items-center justify-center">
                 <img src={service.service_icon} alt={service.service_name} />
@@ -37,7 +37,7 @@ function HomePage() {
               <p className="text-center text-xs font-medium">
                 {service.service_name}
               </p>
-            </div>
+            </button>
           ))
         )}
       </div>
